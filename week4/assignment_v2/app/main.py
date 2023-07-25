@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session, url_for
+from flask import Flask, render_template, request, redirect, session, url_for, jsonify
 
 app = Flask(__name__, 
             static_folder="static", 
@@ -18,21 +18,9 @@ def reset_session(session):
 
 @app.route('/')
 def login():
-    if session.get('username', None):
+    if session.get('username', None): 
         return redirect('/member')
-    
-    # if session.get("error_msg", None): 
-    #     em = session.pop("error_msg", None)  
-    #     redirect_url = url_for('error_page', message=em)
-    #     # print(redirect_url)
-    #     return redirect(f"/error?message={em}")
-    #     return redirect(redirect_url)
-    
     return render_template('index.html') 
-
-@app.route('/test')
-def test_page():
-    return redirect('https://www.google.com')
 
 @app.route("/signin", methods=["POST"])
 def verify_user():
@@ -42,31 +30,25 @@ def verify_user():
 
         # 驗證使用者名稱和密碼
         if (not username) and (not password):
-            session['error_msg'] = "請輸入使用者名稱與密碼"
-            # return {"result":"請輸入使用者名稱與密碼"}
-            em = session['error_msg']
-            em = "請輸入使用者名稱與密碼"
-            return redirect(f"/error?message={em}")
+            msg = "請輸入使用者名稱與密碼"
+            session['error_msg'] = msg
+            return jsonify({"message": msg})
         
         if username not in users: 
-            session['error_msg'] = "使用者不存在或密碼錯誤"
-            # return {"result":"使用者不存在或密碼錯誤"}
-            em = session['error_msg']
-            em = "使用者不存在或密碼錯誤"
-            return redirect(f"/error?message={em}")
+            msg = "使用者不存在或密碼錯誤"
+            session['error_msg'] = msg
+            return jsonify({"message": msg})
         
         if password != users.get(username, None):
-            session['error_msg'] = "使用者不存在或密碼錯誤"
-            # return {"result":"使用者不存在或密碼錯誤"}
-            em = session['error_msg']
-            em = "使用者不存在或密碼錯誤"
-            return redirect(f"/error?message={em}")
+            msg = "使用者不存在或密碼錯誤"
+            session['error_msg'] = msg
+            return jsonify({"message": msg})
         
-        if users.get(username, None) == password & username in users:
+        if users.get(username, None) == password and username in users:
             session["username"] = username 
-            # return {"result":"ok"}
-            return redirect('/')
-
+            msg = "ok"
+            return jsonify({"message": msg})
+        
 # 會員頁面
 @app.route("/member")
 def member_page():
@@ -92,7 +74,6 @@ def error_page():
     if error_msg:
         return render_template( 
             "error.html",
-            page_name=f"無法訪問",
             error_msg=error_msg,
         )
     else:
@@ -103,7 +84,7 @@ def error_page():
 def signout():
     # 刪除 session
     reset_session(session)
-    return redirect("/") 
+    return redirect("/")  
 
 @app.route("/square/<number>") 
 def cal_square(number): 
