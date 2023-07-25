@@ -1,0 +1,65 @@
+body {
+    font-family: Arial, sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+}
+
+.header h1 {
+    font-size: 30px;
+    margin: 0;
+}
+
+.container {
+    width: 80%;
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+h2 {
+    font-size: 24px;
+    margin: 0 0 20px;
+}
+
+p {
+    font-size: 18px;
+    margin: 0 0 10px;
+}
+
+#squared_form {
+    display: flex;
+    justify-content: center;
+}
+
+.centered-placeholder {
+    text-align: center;
+    width: 50%;
+}
+
+.centered-placeholder::placeholder {
+    text-align: center;
+}
+
+.dashed-line {
+    border-bottom: 0 dashed #ccc;
+    width: 100%;
+}
+
+.square_input {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+

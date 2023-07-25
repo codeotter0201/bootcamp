@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Beautiful Body Content</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="header">
+        <h1>{{ page_name }}</h1>
+    </div>
+
+    <div class="container">
+        <h2>{{ username }} 恭喜您，成功登入系統</h2>
+        <a href="/signout">
+            <p>登出系統</p>
+        </a>
+        {% if square_result %}
+            <hr class="dashed-line">
+            <h2>正整數平方計算結果</h2>
+            <p> {{ square_result }} </p>
+            <form id="clear_form" >
+                <button type="submit" class="btn btn-danger mt-3">清空暫存</button>
+            </form>
+        {% else %}
+            <hr class="dashed-line">
+            <h2>計算正整數的平方</h2>
+            <form id="square_form" class="mt-0" onsubmit="return appendNumberToAction()" action="/square/" method="get">
+                <div class="square_input">
+                    <input type="text" class="form-control centered-placeholder" id="square" placeholder="正整數">
+                </div>
+                
+                <button type="submit" class="btn btn-primary mt-3">開始計算</button>
+            </form>
+        {% endif %}
+    </div>
+    <script>
+        function appendNumberToAction() {
+            var input = document.getElementById("square").value;
+            if (isNaN(input) || input <= 0) {
+                alert("Please enter a positive number");
+                return false;
+            }
+            var form = document.getElementById("square_form");
+            form.action += input;
+            return true;
+        }
+        $(document).ready(function() {
+            $("#clear_form").submit(function(event) {
+                event.preventDefault(); // 阻止表單自動提交
+                $.ajax({
+                    url: "/clear",
+                    type: "GET",
+                    success: function(response) {
+                        console.log(response)
+                        // window.location.href='/member';
+                        location.reload();
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            });
+        });
+    </script>
+
+
+
+</body>
+</html>
