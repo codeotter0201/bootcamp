@@ -5,9 +5,10 @@ app = Flask(__name__,
             static_url_path="/static",
             template_folder="templates"
             )
+
 app.secret_key = "your_secret_key"  # 用於加密 session 的密鑰
 
-# 假設以下的使用者資料是存在資料庫中的
+# 使用者資料
 users = {"test": "test"}
 
 def reset_session(session):
@@ -54,7 +55,6 @@ def verify_user():
 def member_page():
     name = session.get("username", None)
     if name:
-        # return redirect('/member.html')
         ret = session.get("square_result", None)
         return render_template(
             "member.html",
@@ -82,7 +82,6 @@ def error_page():
 # 登出
 @app.route("/signout") 
 def signout():
-    # 刪除 session
     reset_session(session)
     return redirect("/")  
 
