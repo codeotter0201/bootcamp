@@ -13,6 +13,7 @@ users = {"test": "test"}
 
 def reset_session(session):
     session["username"] = None
+    session["signed_in"] = False
     session["error_msg"] = None
     session["square_result"] = None
     return session
@@ -47,6 +48,7 @@ def verify_user():
         
         if users.get(username, None) == password and username in users:
             session["username"] = username 
+            session["signed_in"] = True
             msg = "ok"
             return jsonify({"message": msg})
         
@@ -54,7 +56,8 @@ def verify_user():
 @app.route("/member")
 def member_page():
     name = session.get("username", None)
-    if name:
+    signed_in = session.get("signed_in", None)
+    if signed_in:
         ret = session.get("square_result", None)
         return render_template(
             "member.html",
@@ -65,7 +68,8 @@ def member_page():
     else:
         session["username"] = None
         session["error_msg"] = None
-        return redirect("/error?message=Bad boy")
+        # return redirect("/error?message=Bad boy")
+        return redirect("/")
 
 # 登入失敗
 @app.route("/error")
