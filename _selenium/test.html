@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>帳戶資料</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .chart-container {
+      width: 500px;
+      margin: 20px auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>帳戶資料</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>帳戶名稱</th>
+        <th>餘額</th>
+        <th>類型</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>帳戶1</td>
+        <td>$1000</td>
+        <td>儲蓄</td>
+      </tr>
+      <tr>
+        <td>帳戶2</td>
+        <td>$500</td>
+        <td>支票</td>
+      </tr>
+      <!-- 添加更多帳戶數據行，根據需要 -->
+    </tbody>
+  </table>
+
+  <div class="chart-container">
+    <canvas id="line-chart"></canvas>
+  </div>
+
+  <div class="chart-container">
+    <canvas id="pie-chart"></canvas>
+  </div>
+
+  <script>
+    // 折線圖數據
+    var lineChartData = {
+      labels: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月'],
+      datasets: [{
+        label: '帳戶1',
+        data: [1000, 950, 900, 850, 800, 750, 700, 650, 600, 550],
+        borderColor: 'rgba(0, 123, 255, 1)',
+        fill: false
+      }, {
+        label: '帳戶2',
+        data: [500, 550, 600, 650, 700, 750, 800, 850, 900, 950],
+        borderColor: 'rgba(255, 0, 123, 1)',
+        fill: false
+      }]
+    };
+
+    // 圓餅圖數據
+    var pieChartData = {
+      labels: ['儲蓄', '支票'],
+      datasets: [{
+        data: [60, 40],
+        backgroundColor: ['rgba(0, 123, 255, 1)', 'rgba(255, 0, 123, 1)']
+      }]
+    };
+
+    // 折線圖配置
+    var lineChartConfig = {
+      type: 'line',
+      data: lineChartData,
+      options: {
+        responsive: true,
+        maintainAspectRatio: false
+      }
+    };
+
+    // 圓餅圖配置
+    var pieChartConfig = {
+      type: 'pie',
+      data: pieChartData,
+      options: {
+        responsive: true,
+        maintainAspectRatio: false
+      }
+    };
+
+    // 創建折線圖和圓餅圖
+    var lineChart = new Chart(document.getElementById('line-chart'), lineChartConfig);
+    var pieChart = new Chart(document.getElementById('pie-chart'), pieChartConfig);
+  </script>
+</body>
+</html>
