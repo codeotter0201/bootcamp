@@ -31,6 +31,7 @@ body {
 h2 {
     font-size: 24px;
     margin: 0 0 20px;
+    font-weight: bold;
 }
 
 p {
@@ -57,9 +58,10 @@ p {
     width: 100%;
 }
 
-.square_input {
+.input_position {
     display: flex;
     align-items: center;
     justify-content: center;
+    margin: 0 0 10px;
 }
 

@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title> Error </title>
+    <title> Square </title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     <div class="header">
-        <h1> 訪問失敗 </h1>
+        <h1> 計算結果 </h1>
     </div>
 
     <div class="container">
-        <h2> {{ error_msg }} </h2>
+        <h2> {{ square_result }} </h2>
         <a href="/">
             <p>回到首頁</p>
         </a>

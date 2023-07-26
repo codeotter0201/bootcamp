@@ -1,50 +1,47 @@
-function appendNumberToAction() {
-    var input = document.getElementById("square").value;
+function handleLoginFormSubmit(event) {
+    event.preventDefault();
+
+    // 檢查 checkbox 是否已勾選
+    const checkbox = document.getElementById("checkOK");
+    if (!checkbox.checked) {
+    alert("Please agree to the terms and conditions");
+    return;
+    }
+
+    // 取得帳密
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+
+    // 發送 POST 請求
+    fetch("/signin", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ username:username, "password":password })
+    })
+    .then(response => response.json())
+    .then(data => {
+        const message = data['message'];
+        if (message === "ok") {
+        // 跳轉到 /member
+        window.location.href = "/member";
+        } else {
+        // 跳轉到 /error?message=msg
+        window.location.href = `/error?message=${message}`;
+        }
+    })
+    .catch(error => {
+        console.error("發生錯誤:", error);
+    });
+}
+
+function handleSquareSubmit(event) {
+    event.preventDefault();
+    let input = document.getElementById("square").value;
     if (isNaN(input) || input <= 0) {
         alert("Please enter a positive number");
         return false;
     }
-    var form = document.getElementById("square_form");
-    form.action += input;
-    return true;
+    window.location.href = `/square/${input}`;
 }
-$(document).ready(function() {
-    // 監聽表單提交事件
-    $("#loginForm").submit(function(event) {
-        event.preventDefault(); // 阻止表單自動提交
-
-        // 檢查 checkOK 是否已勾選
-        let checkOK = $("#checkOK").prop("checked");
-        if (!checkOK) {
-            alert("Please agree to the terms and conditions");
-            return;
-        }
-
-        // 獲取用戶輸入的用戶名和密碼
-        let username = $("#username").val();
-        let password = $("#password").val();
-
-        // 發送 POST 請求到 /signin
-        $.ajax({
-            url: "/signin",
-            type: "POST",
-            dataType: "json",
-            data: {
-                username: username,
-                password: password
-            },
-            success: function(response) {
-                let msg = response.message;
-                if (msg == "ok"){
-                    window.location.href = "/member";
-                }else {
-                    window.location.href = "/error?message=" + msg;
-                }
-                console.log(response)
-            },
-            error: function(response) {
-                console.log(response)
-            },
-        });
-    });
-});
