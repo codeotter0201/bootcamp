@@ -3,7 +3,9 @@
 
 ### login > create database > choose database
 `mysql -u root -p`
+
 `CREATE DATABASE website;`
+
 `USE website;`
 
 ### create member table
@@ -118,7 +120,9 @@ WHERE mem.username = 'test';
 `mysqldump -u root -p website > data.sql`
 
 ### import data.sql
-`mysqldump -u root -p -e create database testimport;`
-`mysql -u root -p test_import < data.sql`
+```bash
+mysqldump -u root -p -e create database testimport;
+mysql -u root -p test_import < data.sql
+```
 
 ![](https://github.com/codeotter0201/bootcamp/blob/master/week5/assignment/src/task6_export_import.png)
