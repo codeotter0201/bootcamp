@@ -1,6 +1,6 @@
 
 # Task 2
-!(img)[https://github.com/codeotter0201/bootcamp/blob/master/week5/assignment/src/task2_create_member_table.png]
+![](https://github.com/codeotter0201/bootcamp/blob/master/week5/assignment/src/task2_create_member_table.png)
 ### login
 `mysql -u root -p`
 
@@ -23,6 +23,7 @@ CREATE TABLE member (
 ```
 
 # Task 3
+![](https://github.com/codeotter0201/bootcamp/blob/master/week5/assignment/src/task3_insert_member_data.png)
 ## ● 使用 INSERT 指令新增一筆資料到 member 資料表中,這筆資料的 username 和 password 欄位必須是 test。接著繼續新增至少 4 筆隨意的資料。
 ```mysql
 INSERT INTO member (name, username, password, follower_count, time)
@@ -33,6 +34,7 @@ VALUES ('test', 'test', 'test', 10, DATE_ADD(NOW(), INTERVAL FLOOR(RAND() * 12) 
        ('Bob Williams', 'bobwilliams', 'password4', 7, DATE_ADD(NOW(), INTERVAL FLOOR(RAND() * 12) + 1 HOUR));
 ```
 
+![](https://github.com/codeotter0201/bootcamp/blob/master/week5/assignment/src/task3_commands.png)
 ## ● 使用 SELECT 指令取得所有在 member 資料表中的會員資料。
 `SELECT * FROM member;`
 
