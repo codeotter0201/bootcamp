@@ -1,15 +1,16 @@
 
 # Task 2
-## login
+!(img)[https://github.com/codeotter0201/bootcamp/blob/master/week5/assignment/src/task2_create_member_table.png]
+### login
 `mysql -u root -p`
 
-## create database
+### create database
 `CREATE DATABASE website;`
 
-## choose database
+### choose database
 `USE website;`
 
-## create member table
+### create member table
 ```mysql
 CREATE TABLE member (
   id bigint PRIMARY KEY AUTO_INCREMENT,
