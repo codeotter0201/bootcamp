@@ -14,7 +14,6 @@ users = {"test": "test"}
 def reset_session(session):
     session["username"] = None
     session["signed_in"] = False
-    session["error_msg"] = None
     return session
 
 @app.route('/')
@@ -33,21 +32,18 @@ def verify_user():
         # 驗證使用者名稱和密碼 
         if (not username) and (not password):
             msg = "請輸入使用者名稱與密碼"
-            session['error_msg'] = msg
             return jsonify({"message": msg})
         
         if username not in users: 
             msg = "使用者不存在或密碼錯誤"
-            session['error_msg'] = msg
             return jsonify({"message": msg})
         
         if password != users.get(username, None):
             msg = "使用者不存在或密碼錯誤"
-            session['error_msg'] = msg
             return jsonify({"message": msg})
         
         if users.get(username, None) == password and username in users:
-            session["username"] = username      
+            session["username"] = username
             session["signed_in"] = True
             msg = "ok"
             return jsonify({"message": msg})
@@ -66,7 +62,6 @@ def member_page():
         )
     else:
         session["username"] = None
-        session["error_msg"] = None
         return redirect("/")
 
 # 登入失敗
