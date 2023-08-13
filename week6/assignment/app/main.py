@@ -52,14 +52,14 @@ class Message(db.Model):
         return message_dict
 
 def reset_session(session):
-    session["userid"] = None
+    session["name"] = None
     session["username"] = None
     session["signed_in"] = False
     return session
 
 @app.route('/')
 def homepage():
-    if session.get('userid', None):
+    if session.get('name', None):
         return redirect('/member')
     return render_template('index.html')
 
