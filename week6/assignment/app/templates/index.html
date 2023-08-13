@@ -15,11 +15,11 @@
         <h2> 註冊系統 </h2>
         <form id="signupForm" class="mt-0">
             <div class="input_position">
-                <input type="text" class="form-control centered-placeholder" id="signupUsername" name="username" placeholder="Enter username">
+                <input type="text" class="form-control centered-placeholder" id="signupName" name="name" placeholder="Enter name">
             </div>
 
             <div class="input_position">
-                <input type="text" class="form-control centered-placeholder" id="signupUserid" name="userid" placeholder="Enter userid">
+                <input type="text" class="form-control centered-placeholder" id="signupUsername" name="username" placeholder="Enter username">
             </div>
 
             <div class="input_position">
@@ -34,7 +34,7 @@
         <h2> 登入系統 </h2>
         <form id="loginForm" class="mt-0">
             <div class="input_position">
-                <input type="text" class="form-control centered-placeholder" id="userid" name="userid" placeholder="Enter userid">
+                <input type="text" class="form-control centered-placeholder" id="username" name="username" placeholder="Enter username">
             </div>
 
             <div class="input_position">
@@ -52,10 +52,10 @@
             event.preventDefault();
         
             // 取得帳密
-            const userid = document.getElementById("userid").value;
+            const username = document.getElementById("username").value;
             const password = document.getElementById("password").value;
 
-            if (userid.trim() === '' || password.trim() === '') {
+            if (username.trim() === '' || password.trim() === '') {
                 alert("Please fill up all values");
             return;
             }
@@ -66,7 +66,7 @@
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ userid:userid, "password":password })
+            body: JSON.stringify({ username:username, "password":password })
             })
             .then(response => response.json())
             .then(data => {
@@ -88,7 +88,7 @@
             event.preventDefault();
 
             // 取得帳密
-            const userid = document.getElementById("signupUserid").value;
+            const name = document.getElementById("signupName").value;
             const username = document.getElementById("signupUsername").value;
             const password = document.getElementById("signupPassword").value;
         
@@ -98,14 +98,15 @@
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ "userid":userid, "username":username, "password":password })
+            body: JSON.stringify({ "name":name, "username":username, "password":password })
             })
             .then(response => response.json())
             .then(data => {
                 const message = data['message'];
                 if (message === "ok") {
-                // 跳轉到 /member
-                window.location.href = "/member";
+                // 跳轉到 /
+                alert("註冊成功！");
+                window.location.href = "/";
                 } else {
                 // 跳轉到 /error?message=msg
                 window.location.href = `/error?message=${message}`;
