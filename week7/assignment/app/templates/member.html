@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title> Member </title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="header">
+        <h1>{{ page_name }}</h1>
+    </div>
+
+    <div class="container">
+        <h2>{{ username }} 恭喜您，成功登入系統</h2>
+        <a class="btn btn-primary mt-3" href="/signout">登出系統</a>
+        
+        <hr class="dashed-line">
+
+        <h2>快來留言吧</h2>
+        <form id="messageForm" class="mt-0">
+            <div class="input_position">
+                <input type="text" class="form-control centered-placeholder" id="message" placeholder="Enter content">
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">送出</button>
+        </form>
+
+        <hr class="dashed-line">
+        <h2>留言區</h2>
+        <div id="messageContainer"></div>
+
+        <hr class="dashed-line">
+        <h2>查詢會員姓名</h2>
+        <form id="queryForm" class="mt-0">
+            <div class="input_position">
+                <input type="text" class="form-control centered-placeholder" id="queryName" name="username" placeholder="Enter username">
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">查詢</button>
+            <div id="queryResult"></div>
+        </form>
+
+        <hr class="dashed-line">
+        <h2>更新我的姓名</h2>
+        <form id="patchForm" class="mt-0">
+            <div class="input_position">
+                <input type="text" class="form-control centered-placeholder" id="patchName" name="name" placeholder="Enter name">
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">更新</button>
+            <div id="patchResult"></div>
+        </form>
+    </div>
+    <script>
+        function handleMessageSubmit(event) {
+            event.preventDefault();
+        
+            // 取得帳密
+            const message = document.getElementById("message").value;
+        
+            // 發送 POST 請求
+            fetch("/createMessage", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ "message":message })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const message = data['message'];
+                if (message === "ok") {
+                // 跳轉到 /member
+                window.location.href = "/member";
+                } else {
+                // 跳轉到 /error?message=msg
+                window.location.href = `/error?message=${message}`;
+                }
+            })
+            .catch(error => {
+                console.error("發生錯誤:", error);
+            });
+        }
+
+        function deleteMessageButton(messageId) {
+            fetch('/deleteMessage', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ message_id: messageId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const message = data['message'];
+                if (message === "ok") {
+                // 跳轉到 /member
+                window.location.href = "/member";
+                } else {
+                // 跳轉到 /error?message=msg
+                window.location.href = `/error?message=${message}`;
+                }
+            })
+            .catch(error => {
+                console.error('刪除留言時發生錯誤:', error);
+            });
+        }
+
+        // 解析數據並顯示到留言區
+        function displayMessages(data) {
+            let messageContainer = document.getElementById('messageContainer');
+            messageContainer.innerHTML = '';
+
+            data.forEach(function(message) {
+                let name = Object.keys(message)[0];
+                let id = message[name];
+                let messageId = message.message_id;
+
+                let messageElement = document.createElement('p');
+                messageElement.innerHTML = name + ': ' + id;
+
+                if (messageId !== -1) {
+                    let deleteButton = document.createElement('button');
+                    deleteButton.innerHTML = 'X';
+                    deleteButton.classList.add('delete-button');
+                    deleteButton.addEventListener('click', function() {
+                        let confirmDelete = confirm('確定要刪除留言嗎?');
+                        if (confirmDelete) {
+                            deleteMessageButton(messageId);
+                        }
+                    });
+                    messageElement.appendChild(deleteButton);
+                }
+
+                messageContainer.appendChild(messageElement);
+            });
+        }
+
+        function handleQueryNameSubmit() {
+            event.preventDefault();
+            const queryName = document.getElementById("queryName").value;
+
+            fetch(`/api/member?username=${queryName}`)
+                .then(response => response.json())
+                .then(data => {
+                    const result = data.data;
+                    const queryResult = document.getElementById("queryResult");
+
+                    if (result !== null) {
+                        queryResult.innerText = `查詢結果：${result.name}`;
+                    } else {
+                        queryResult.innerText = "查詢失敗";
+                    }
+                })
+                .catch(error => {
+                    console.error("發生錯誤:", error);
+                });
+        }
+
+        function handlePatchNameSubmit(event) {
+            event.preventDefault();
+
+            const name = document.getElementById("patchName").value;
+            const patchResult = document.getElementById("patchResult");
+
+            fetch(`/api/member`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name: name })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.ok) {
+                        patchResult.innerText = "更新成功";
+                    } else {
+                        patchResult.innerText = "更新失敗";
+                    }
+                })
+                .catch(error => {
+                    console.error("發生錯誤:", error);
+                    patchResult.innerText = "更新失敗";
+                });
+        }
+
+        // 在頁面加載完成後執行
+        window.onload = function() {
+            // 發送 GET 請求到 /get_message
+            fetch('/readMessage')
+                .then(response => response.json())
+                .then(data => {
+                    // 解析收到的數據並顯示到留言區
+                    displayMessages(data);
+                });
+        };
+
+        // 監聽提交事件
+        const messageForm = document.getElementById("messageForm");
+        messageForm.addEventListener("submit", handleMessageSubmit);
+        const queryForm = document.getElementById("queryForm");
+        queryForm.addEventListener("submit", handleQueryNameSubmit);
+        const patchForm = document.getElementById("patchForm");
+        patchForm.addEventListener("submit", handlePatchNameSubmit);
+
+    </script>
+</body>
+</html>
