@@ -228,6 +228,12 @@ def patch_member():
     isSigned = session.get('signed_in', None)
     username = session.get('username', None)
     if isSigned & isinstance(name, str):
+        existing_member = Member.query.filter_by(name=name).first()
+        if existing_member:
+            return {
+                "error": True
+            }
+
         member:Member = Member.query.filter_by(username=username).first()
         if member:
             session['name'] = name

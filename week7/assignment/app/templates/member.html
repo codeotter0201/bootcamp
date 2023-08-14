@@ -172,7 +172,7 @@
                     if (data.ok) {
                         patchResult.innerText = "更新成功";
                     } else {
-                        patchResult.innerText = "更新失敗";
+                        patchResult.innerText = "更新失敗：name已經被使用或登入失敗";
                     }
                 })
                 .catch(error => {
