@@ -91,7 +91,13 @@
             const name = document.getElementById("signupName").value;
             const username = document.getElementById("signupUsername").value;
             const password = document.getElementById("signupPassword").value;
-        
+
+            // 檢查欄位填寫
+            if (username.trim() === '' || password.trim() === '' || name.trim() === '') {
+                alert("Please fill up all values");
+            return;
+            }
+
             // 發送 POST 請求
             fetch("/signup", {
             method: "POST",

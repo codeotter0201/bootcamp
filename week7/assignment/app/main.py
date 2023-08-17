@@ -228,12 +228,6 @@ def patch_member():
     isSigned = session.get('signed_in', None)
     username = session.get('username', None)
     if isSigned & isinstance(name, str):
-        existing_member = Member.query.filter_by(name=name).first()
-        if existing_member:
-            return {
-                "error": True
-            }
-
         member:Member = Member.query.filter_by(username=username).first()
         if member:
             session['name'] = name
@@ -246,17 +240,17 @@ def patch_member():
         "error":True
     }
 
-@app.route('/reset')
-def db_reset():
-    db.drop_all()
-    db.create_all()
-    return 'ok'
+# @app.route('/reset')
+# def db_reset():
+#     db.drop_all()
+#     db.create_all()
+#     return 'db reset ok'
 
-@app.route('/all')
-def all():
-    members:list[Message] = Member.query.all()
-    msgs:list[Message] = Message.query.all()
-    return jsonify({'member':[i.to_json() for i in members], 'msgs':[i.to_json() for i in msgs]})
+# @app.route('/all')
+# def all():
+#     members:list[Message] = Member.query.all()
+#     msgs:list[Message] = Message.query.all()
+#     return jsonify({'member':[i.to_json() for i in members], 'msgs':[i.to_json() for i in msgs]})
 
 if __name__ == "__main__": 
     db.create_all()
